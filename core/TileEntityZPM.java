@@ -1,4 +1,4 @@
-package net.ajitek.mc.zpm;
+package net.ajitek.mc.zpm.core;
 
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.ic2.api.Direction;

@@ -1,4 +1,4 @@
-package net.ajitek.mc.zpm;
+package net.ajitek.mc.zpm.core;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.Material;
@@ -8,7 +8,7 @@ import net.minecraft.src.BaseMod;
 import net.minecraft.src.ModLoader;
 
 import java.io.File;
-import net.minecraft.client.Minecraft;
+import net.ajitek.mc.zpm.Proxy;
 import net.minecraft.src.forge.Configuration;
 import net.minecraft.src.forge.Property;
 
@@ -23,7 +23,7 @@ public class mod_ZPM extends BaseMod {
 	}
 
 	public void initConfig() {
-		File configFile = new File(new File(Minecraft.getMinecraftDir(), "config"), "ZPM.conf");
+		File configFile = Proxy.getConfig();
 		Configuration config = new Configuration(configFile);
 		Property prop;
 

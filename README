@@ -2,3 +2,9 @@ ZPM -- Zero-Point Module
 
 Contact aji on EsperNet if you have questions. If you're interested in
 Minecraft modding, you should be there anyway.
+
+Symlinks:
+  core -> src/minecraft/net/ajitek/mc/zpm/core
+  client/Proxy.java -> src/minecraft/net/ajitek/mc/zpm/Proxy.java
+  core -> src/minecraft_server/net/ajitek/mc/zpm/core
+  server/Proxy.java -> src/minecraft_server/net/ajitek/mc/zpm/Proxy.java
