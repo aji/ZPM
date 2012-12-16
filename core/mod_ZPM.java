@@ -4,15 +4,15 @@ import net.minecraft.src.Block;
 import net.minecraft.src.Material;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemBlock;
-import net.minecraft.src.BaseMod;
 import net.minecraft.src.ModLoader;
 
 import java.io.File;
 import net.ajitek.mc.zpm.Proxy;
 import net.minecraft.src.forge.Configuration;
 import net.minecraft.src.forge.Property;
+import net.minecraft.src.forge.NetworkMod;
 
-public class mod_ZPM extends BaseMod {
+public class mod_ZPM extends NetworkMod {
 	public final static String NAME = "ZPM";
 	public final static String VERSION = "1.0";
 
