@@ -8,3 +8,5 @@ Symlinks:
   client/Proxy.java -> src/minecraft/net/ajitek/mc/zpm/Proxy.java
   core -> src/minecraft_server/net/ajitek/mc/zpm/core
   server/Proxy.java -> src/minecraft_server/net/ajitek/mc/zpm/Proxy.java
+  mcmod.info -> reobf/minecraft/mcmod.info
+  mcmod.info -> reobf/minecraft_server/mcmod.info
