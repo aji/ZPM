@@ -14,7 +14,7 @@ import net.minecraft.src.forge.NetworkMod;
 
 public class mod_ZPM extends NetworkMod {
 	public final static String NAME = "ZPM";
-	public final static String VERSION = "1.1";
+	public final static String VERSION = "1.2dev";
 
 	@Override
 	public void load() {
