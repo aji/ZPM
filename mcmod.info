@@ -8,7 +8,7 @@
 	"logoFile": "",
 	"url": "https://github.com/aji/ZPM",
 	"updateUrl": "",
-	"parent": "mod_IC2",
+	"parent": "",
 	"screenshots": [],
 	"dependencies": ["mod_IC2","mod_MinecraftForge"]
 }]

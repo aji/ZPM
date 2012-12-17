@@ -7,6 +7,7 @@ import net.minecraft.src.Material;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.IBlockAccess;
 import net.minecraft.src.World;
+import net.minecraft.src.EntityPlayer;
 
 import java.util.ArrayList;
 
@@ -25,6 +26,15 @@ public class BlockZPM extends BlockContainer {
 		if (side < 2)
 			return texBase;
 		return texBase + 1;
+	}
+
+	@Override
+	public boolean blockActivated(World w, int x, int y, int z, EntityPlayer ep) {
+		if (ep.isSneaking())
+			return false;
+
+		ep.openGui(mod_ZPM.getInstance(), 0, w, x, y, z);
+		return true;
 	}
 
 	public TileEntity getBlockEntity() {

@@ -10,16 +10,31 @@ import java.io.File;
 import net.ajitek.mc.zpm.proxy.Proxy;
 import net.minecraft.src.forge.Configuration;
 import net.minecraft.src.forge.Property;
+import net.minecraft.src.forge.MinecraftForge;
 import net.minecraft.src.forge.NetworkMod;
 
 public class mod_ZPM extends NetworkMod {
 	public final static String NAME = "ZPM";
 	public final static String VERSION = "1.2dev";
 
+	private static mod_ZPM instance = null;
+
+	protected Proxy proxy;
+
+	public static mod_ZPM getInstance() {
+		return mod_ZPM.instance;
+	}
+
 	@Override
 	public void load() {
+		mod_ZPM.instance = this;
+
+		proxy = new Proxy();
+
 		initConfig();
 		initBlock();
+
+		MinecraftForge.setGuiHandler(this, proxy);
 	}
 
 	public void initConfig() {

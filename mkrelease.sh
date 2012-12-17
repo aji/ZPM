@@ -11,6 +11,7 @@ if [ -z "$MCP" -o -z "$VERSION" ]; then
 	echo ""
 	echo "The following files are copied into the jar with the following mappings:"
 	echo "  art/zpmtex.png => /net/ajitek/mc/zpm/block.png"
+	echo "  art/gui.png => /net/ajitek/mc/zpm/gui.png"
 	echo "  mcmod.info => /mcmod.info"
 	exit 1
 fi
@@ -56,6 +57,7 @@ mkdir -p "$DIR_RELEASE"
 
 cd $DIR_MCP/reobf/minecraft
 cp $DIR_ZPM/art/zpmtex.png net/ajitek/mc/zpm/block.png
+cp $DIR_ZPM/art/gui.png net/ajitek/mc/zpm/gui.png
 cp $DIR_ZPM/mcmod.info mcmod.info
 echo "Creating $JAR_CLIENT"
 jar cf "$JAR_CLIENT" *

@@ -5,6 +5,7 @@ import net.minecraft.src.Item;
 
 public class Common {
 	public static final String BLOCK_PNG = "/net/ajitek/mc/zpm/block.png";
+	public static final String GUI_PNG = "/net/ajitek/mc/zpm/gui.png";
 
 	public static int ZPM_ID = 500;
 	public static String ZPM_NAME = "Zero-Point Module";
