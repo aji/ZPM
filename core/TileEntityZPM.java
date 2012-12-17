@@ -8,12 +8,8 @@ import net.minecraft.src.ic2.api.IEnergySink;
 import java.lang.reflect.Field;
 
 public class TileEntityZPM extends TileEntity {
-	protected static final int TICKS = 5;
-	protected int ticks;
-
 	public TileEntityZPM() {
 		super();
-		ticks = TileEntityZPM.TICKS - 1;
 		initReflection();
 	}
 
@@ -24,19 +20,12 @@ public class TileEntityZPM extends TileEntity {
 
 	@Override
 	public void updateEntity() {
-		ticks++;
-
-		if (ticks < TileEntityZPM.TICKS)
-			return;
-
 		chargeToward(Direction.XN);
 		chargeToward(Direction.XP);
 		chargeToward(Direction.YN);
 		chargeToward(Direction.YP);
 		chargeToward(Direction.ZN);
 		chargeToward(Direction.ZP);
-
-		ticks = 0;
 	}
 
 	public void chargeToward(Direction dir) {
@@ -54,8 +43,12 @@ public class TileEntityZPM extends TileEntity {
 			IEnergySink sink = (IEnergySink)tile;
 
 			if (isStorage(tile)) {
-				energy = getMaxStorage(tile) - getEnergy(tile);
+				int maxStorage = getMaxStorage(tile);
+				energy = maxStorage - getEnergy(tile);
 				pax = getOutput(tile);
+
+				if (energy > maxStorage / 20)
+					energy = maxStorage / 20;
 			}
 
 			while (energy > 0 && sink.demandsEnergy()) {
