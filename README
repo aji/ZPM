@@ -1,5 +1,11 @@
 ZPM -- Zero-Point Module
 
+ZPM charges all neighboring energy sinks (anything with the IEnergySink
+interface which includes all IC2 machines and storage blocks.) Storage
+blocks (the MFSU, MFE, and BatBox) are filled at a rate of 1/20th their
+capacity per tick, meaning an empty storage block will be filled in a
+single second.
+
 Contact aji on EsperNet if you have questions. If you're interested in
 Minecraft modding, you should be there anyway.
 
