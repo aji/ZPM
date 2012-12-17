@@ -7,7 +7,7 @@ import net.minecraft.src.ItemBlock;
 import net.minecraft.src.ModLoader;
 
 import java.io.File;
-import net.ajitek.mc.zpm.Proxy;
+import net.ajitek.mc.zpm.proxy.Proxy;
 import net.minecraft.src.forge.Configuration;
 import net.minecraft.src.forge.Property;
 import net.minecraft.src.forge.NetworkMod;

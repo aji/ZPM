@@ -1,4 +1,4 @@
-package net.ajitek.mc.zpm;
+package net.ajitek.mc.zpm.proxy;
 
 import java.io.File;
 

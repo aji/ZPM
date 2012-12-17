@@ -1,4 +1,4 @@
-package net.ajitek.mc.zpm;
+package net.ajitek.mc.zpm.proxy;
 
 import net.minecraft.client.Minecraft;
 import java.io.File;

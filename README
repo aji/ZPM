@@ -11,8 +11,8 @@ Minecraft modding, you should be there anyway.
 
 Symlinks:
   core -> src/minecraft/net/ajitek/mc/zpm/core
-  client/Proxy.java -> src/minecraft/net/ajitek/mc/zpm/Proxy.java
   core -> src/minecraft_server/net/ajitek/mc/zpm/core
-  server/Proxy.java -> src/minecraft_server/net/ajitek/mc/zpm/Proxy.java
+  client -> src/minecraft/net/ajitek/mc/zpm/proxy
+  server -> src/minecraft_server/net/ajitek/mc/zpm/proxy
   mcmod.info -> reobf/minecraft/mcmod.info
   mcmod.info -> reobf/minecraft_server/mcmod.info
