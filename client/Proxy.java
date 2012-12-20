@@ -21,7 +21,7 @@ public class Proxy implements IGuiHandler {
 
 		te = world.getBlockTileEntity(x, y, z);
 
-		if (te instanceof TileEntityZPM)
+		if (te != null && te instanceof TileEntityZPM)
 			return new GuiZPM((TileEntityZPM)te);
 
 		return null;

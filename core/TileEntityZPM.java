@@ -4,13 +4,33 @@ import net.minecraft.src.TileEntity;
 import net.minecraft.src.ic2.api.Direction;
 import net.minecraft.src.ic2.api.IEnergyStorage;
 import net.minecraft.src.ic2.api.IEnergySink;
+import net.minecraft.src.NBTTagCompound;
 
 import java.lang.reflect.Field;
 
 public class TileEntityZPM extends TileEntity {
+	public int someData = -1;
+
 	public TileEntityZPM() {
 		super();
 		initReflection();
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound nbt) {
+		super.readFromNBT(nbt);
+
+		if (nbt.hasKey("someData")) {
+			someData = nbt.getInteger("someData");
+		} else {
+			someData = 50;
+		}
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound nbt) {
+		super.writeToNBT(nbt);
+		nbt.setInteger("someData", someData);
 	}
 
 	@Override
@@ -94,6 +114,14 @@ public class TileEntityZPM extends TileEntity {
 			return TEEB_energy.getInt(tile);
 		} catch (Exception e) {
 			return 0;
+		}
+	}
+
+	private static void setEnergy(TileEntity tile, int energy) {
+		try {
+			TEEB_energy.setInt(tile, energy);
+		} catch (Exception e) {
+			/* bleh */
 		}
 	}
 

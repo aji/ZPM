@@ -16,11 +16,8 @@ public class GuiZPM extends GuiScreen
 	protected int buttonWide = 35;
 	protected final int buttonHigh = 20;
 
-	protected int value;
-
 	public GuiZPM(TileEntityZPM te) {
 		zpm = te;
-		value = 100;
 	}
 
 	@Override
@@ -35,7 +32,10 @@ public class GuiZPM extends GuiScreen
 
 		super.drawScreen(x, y, z);
 
-		String s = Integer.toString(value) + "%";
+		String s = Integer.toString(zpm.someData) + "%";
+		if (zpm.someData < 0)
+			s = "---";
+
 		int wide = 2 * fontRenderer.getStringWidth(s) - fontRenderer.getStringWidth("100%");
 		int high = fontRenderer.FONT_HEIGHT;
 		fontRenderer.drawStringWithShadow(s, (width - wide) / 2, (height - high) / 2, 0xffffff);
@@ -64,11 +64,14 @@ public class GuiZPM extends GuiScreen
 
 	@Override
 	protected void actionPerformed(GuiButton btn) {
-		value += btn.id;
-		if (value < 0)
-			value = 0;
-		if (value > 100)
-			value = 100;
+		if (zpm.someData < 0)
+			return;
+
+		zpm.someData += btn.id;
+		if (zpm.someData < 0)
+			zpm.someData = 0;
+		if (zpm.someData > 100)
+			zpm.someData = 100;
 	}
 
 }
