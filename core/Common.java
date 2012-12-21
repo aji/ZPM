@@ -4,6 +4,8 @@ import net.minecraft.src.Block;
 import net.minecraft.src.Item;
 
 public class Common {
+	public static final String CHANNEL = "ajitekZPM";
+
 	public static final String BLOCK_PNG = "/net/ajitek/mc/zpm/block.png";
 	public static final String GUI_PNG = "/net/ajitek/mc/zpm/gui.png";
 

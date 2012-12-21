@@ -2,8 +2,11 @@ package net.ajitek.mc.zpm.proxy;
 
 import net.ajitek.mc.zpm.core.TileEntityZPM;
 import net.ajitek.mc.zpm.core.Common;
+import net.ajitek.mc.zpm.core.mod_ZPM;
+import net.minecraft.src.ModLoader;
 import net.minecraft.src.GuiScreen;
 import net.minecraft.src.GuiButton;
+import net.minecraft.src.Packet132TileEntityData;
 import org.lwjgl.opengl.GL11;
 
 public class GuiZPM extends GuiScreen
@@ -21,6 +24,11 @@ public class GuiZPM extends GuiScreen
 	}
 
 	@Override
+	public void onGuiClosed() {
+		mod_ZPM.getInstance().proxy.sendUpdateToServer(zpm);
+	}
+
+	@Override
 	public void drawScreen(int x, int y, float z) {
 		int tex = mc.renderEngine.getTexture(Common.GUI_PNG);
 		int dx = (width - xSize) / 2;
@@ -34,7 +42,7 @@ public class GuiZPM extends GuiScreen
 
 		String s = Integer.toString(zpm.someData) + "%";
 		if (zpm.someData < 0)
-			s = "---";
+			s = "";
 
 		int wide = 2 * fontRenderer.getStringWidth(s) - fontRenderer.getStringWidth("100%");
 		int high = fontRenderer.FONT_HEIGHT;

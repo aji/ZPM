@@ -5,8 +5,14 @@ import net.minecraft.src.ic2.api.Direction;
 import net.minecraft.src.ic2.api.IEnergyStorage;
 import net.minecraft.src.ic2.api.IEnergySink;
 import net.minecraft.src.NBTTagCompound;
-
+import net.minecraft.src.forge.MinecraftForge;
+import net.minecraft.src.NetworkManager;
+import net.minecraft.src.forge.MessageManager;
+import cpw.mods.fml.common.FMLCommonHandler;
 import java.lang.reflect.Field;
+import java.io.IOException;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 
 public class TileEntityZPM extends TileEntity {
 	public int someData = -1;
@@ -14,6 +20,8 @@ public class TileEntityZPM extends TileEntity {
 	public TileEntityZPM() {
 		super();
 		initReflection();
+
+		someData = 50;
 	}
 
 	@Override
@@ -76,6 +84,17 @@ public class TileEntityZPM extends TileEntity {
 				energy -= pax;
 			}
 		}
+	}
+
+	/* Network stuff */
+
+	public void handleUpdatePacket(NetworkManager net, DataInputStream in, boolean isServer)
+	throws IOException {
+		someData = in.readInt();
+	}
+
+	public void buildUpdatePacket(DataOutputStream out, boolean isServer) throws IOException {
+		out.writeInt(someData);
 	}
 
 
