@@ -1,6 +1,7 @@
 package net.ajitek.mc.zpm.proxy;
 
 import net.ajitek.mc.zpm.core.TileEntityZPM;
+import net.ajitek.mc.zpm.core.TileEntityBase;
 import net.ajitek.mc.zpm.core.Common;
 import net.ajitek.mc.zpm.core.mod_ZPM;
 import net.minecraft.src.ModLoader;
@@ -9,7 +10,7 @@ import net.minecraft.src.GuiButton;
 import net.minecraft.src.Packet132TileEntityData;
 import org.lwjgl.opengl.GL11;
 
-public class GuiZPM extends GuiScreen
+public class GuiZPM extends GuiBase
 {
 	protected TileEntityZPM zpm;
 
@@ -19,13 +20,15 @@ public class GuiZPM extends GuiScreen
 	protected int buttonWide = 35;
 	protected final int buttonHigh = 20;
 
-	public GuiZPM(TileEntityZPM te) {
-		zpm = te;
+	@Override
+	public void setTileEntity(TileEntityBase teb) {
+		/* unchecked cast, to raise an exception if necessary */
+		zpm = (TileEntityZPM)teb;
 	}
 
 	@Override
 	public void onGuiClosed() {
-		mod_ZPM.getInstance().proxy.sendUpdateToServer(zpm);
+		zpm.sendUpdateToServer();
 	}
 
 	@Override
@@ -46,7 +49,7 @@ public class GuiZPM extends GuiScreen
 
 		int wide = 2 * fontRenderer.getStringWidth(s) - fontRenderer.getStringWidth("100%");
 		int high = fontRenderer.FONT_HEIGHT;
-		fontRenderer.drawStringWithShadow(s, (width - wide) / 2, (height - high) / 2, 0xffffff);
+		fontRenderer.drawString(s, (width - wide) / 2, (height - high) / 2, 0);
 	}
 
 	@Override

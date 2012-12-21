@@ -1,6 +1,6 @@
 package net.ajitek.mc.zpm.proxy;
 
-import net.ajitek.mc.zpm.core.TileEntityZPM;
+import net.ajitek.mc.zpm.core.TileEntityBase;
 import net.ajitek.mc.zpm.core.Common;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.EntityPlayerMP;
@@ -37,10 +37,8 @@ public class Proxy implements IGuiHandler, IPacketHandler {
 		player = (EntityPlayerMP)p;
 		te = world.getBlockTileEntity(x, y, z);
 
-		if (te != null && te instanceof TileEntityZPM) {
-			TileEntityZPM zpm = (TileEntityZPM)te;
-			sendUpdateToPlayer(p.getUsername(), zpm);
-		}
+		if (te != null && te instanceof TileEntityBase)
+			((TileEntityBase)te).sendUpdateToPlayer(p.getUsername());
 
 		return null;
 	}
@@ -73,37 +71,9 @@ public class Proxy implements IGuiHandler, IPacketHandler {
 			int z = in.readInt();
 			TileEntity tile = world.getBlockTileEntity(x, y, z);
 
-			if (tile != null && tile instanceof TileEntityZPM)
-				((TileEntityZPM)tile).handleUpdatePacket(net, in, false);
+			if (tile != null && tile instanceof TileEntityBase)
+				((TileEntityBase)tile).handleUpdatePacket(net, in, false);
 		}
-	}
-
-	public Packet250CustomPayload buildUpdatePacket(TileEntityZPM zpm) {
-		ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
-		DataOutputStream out = new DataOutputStream(bytesOut);
-
-		try {
-			out.writeByte((byte)0);
-			out.writeInt(zpm.xCoord);
-			out.writeInt(zpm.yCoord);
-			out.writeInt(zpm.zCoord);
-			zpm.buildUpdatePacket(out, true);
-		} catch (IOException e) {
-			return null;
-		}
-
-		Packet250CustomPayload pkt = new Packet250CustomPayload();
-		pkt.channel = Common.CHANNEL;
-		pkt.data = bytesOut.toByteArray();
-		pkt.length = pkt.data.length;
-		return pkt;
-	}
-
-	public void sendUpdateToServer(TileEntityZPM zpm) {
-	}
-
-	public void sendUpdateToPlayer(String player, TileEntityZPM zpm) {
-		sendPacketToPlayer(player, buildUpdatePacket(zpm));
 	}
 
 	public void sendPacketToServer(Packet pkt) {

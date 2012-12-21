@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
-public class TileEntityZPM extends TileEntity {
+public class TileEntityZPM extends TileEntityBase {
 	public int someData = -1;
 
 	public TileEntityZPM() {
@@ -88,12 +88,25 @@ public class TileEntityZPM extends TileEntity {
 
 	/* Network stuff */
 
+	@Override
+	public String getGuiClassName() {
+		return "net.ajitek.mc.zpm.proxy.GuiZPM";
+	}
+
+	@Override
+	public void clientGuiReinit() {
+		someData = -1;
+	}
+
+	@Override
 	public void handleUpdatePacket(NetworkManager net, DataInputStream in, boolean isServer)
 	throws IOException {
 		someData = in.readInt();
 	}
 
-	public void buildUpdatePacket(DataOutputStream out, boolean isServer) throws IOException {
+	@Override
+	public void fillUpdatePacket(DataOutputStream out, boolean isServer)
+	throws IOException {
 		out.writeInt(someData);
 	}
 

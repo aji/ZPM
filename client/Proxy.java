@@ -1,6 +1,6 @@
 package net.ajitek.mc.zpm.proxy;
 
-import net.ajitek.mc.zpm.core.TileEntityZPM;
+import net.ajitek.mc.zpm.core.TileEntityBase;
 import net.ajitek.mc.zpm.core.Common;
 import net.ajitek.mc.zpm.core.mod_ZPM;
 import net.minecraft.client.Minecraft;
@@ -34,14 +34,34 @@ public class Proxy implements IGuiHandler, IPacketHandler {
 
 		te = world.getBlockTileEntity(x, y, z);
 
-		if (te != null && te instanceof TileEntityZPM) {
-			TileEntityZPM zpm = (TileEntityZPM)te;
-			if (world.isRemote)
-				zpm.someData = -1;
-			return new GuiZPM(zpm);
+		if (te == null || !(te instanceof TileEntityBase))
+			return null;
+
+		TileEntityBase teb = (TileEntityBase)te;
+		String guiClassName = teb.getGuiClassName();
+		Class guiClass;
+		Object guiObject;
+
+		if (guiClassName == null)
+			return null;
+
+		try {
+			guiClass = Class.forName(guiClassName);
+			guiObject = guiClass.newInstance();
+		} catch (Exception e) {
+			/* TODO: be smarter about this */
+			return null;
 		}
 
-		return null;
+		if (!(guiObject instanceof GuiBase))
+			return null;
+
+		((GuiBase)guiObject).setTileEntity(teb);
+
+		if (world.isRemote)
+			teb.clientGuiReinit();
+
+		return guiObject;
 	}
 
 	public void onPacketData(NetworkManager net, String channel, byte[] data) {
@@ -67,37 +87,9 @@ public class Proxy implements IGuiHandler, IPacketHandler {
 			int z = in.readInt();
 			TileEntity tile = world.getBlockTileEntity(x, y, z);
 
-			if (tile != null && tile instanceof TileEntityZPM)
-				((TileEntityZPM)tile).handleUpdatePacket(net, in, false);
+			if (tile != null && tile instanceof TileEntityBase)
+				((TileEntityBase)tile).handleUpdatePacket(net, in, false);
 		}
-	}
-
-	public Packet250CustomPayload buildUpdatePacket(TileEntityZPM zpm) {
-		ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
-		DataOutputStream out = new DataOutputStream(bytesOut);
-
-		try {
-			out.writeByte((byte)0);
-			out.writeInt(zpm.xCoord);
-			out.writeInt(zpm.yCoord);
-			out.writeInt(zpm.zCoord);
-			zpm.buildUpdatePacket(out, false);
-		} catch (IOException e) {
-			return null;
-		}
-
-		Packet250CustomPayload pkt = new Packet250CustomPayload();
-		pkt.channel = Common.CHANNEL;
-		pkt.data = bytesOut.toByteArray();
-		pkt.length = pkt.data.length;
-		return pkt;
-	}
-
-	public void sendUpdateToServer(TileEntityZPM zpm) {
-		sendPacketToServer(buildUpdatePacket(zpm));
-	}
-
-	public void sendUpdateToPlayer(String player, TileEntityZPM zpm) {
 	}
 
 	public void sendPacketToServer(Packet pkt) {
