@@ -1,0 +1,15 @@
+<project>
+	<target name="clean">
+		<delete dir="build" />
+	</target>
+
+	<target name="compile">
+		<mkdir dir="build" />
+		<javac srcdir="src" destdir="build"
+			classpath="lib/craftbukkit-1.2.5-R5.0-MCPC-SNAPSHOT-183.jar:lib/industrialcraft2-1.103-mcpc1.2.5-r2.zip" />
+	</target>
+
+	<target name="jar">
+		<jar destfile="zpm-1.2-mcpc-1.2.5.jar" basedir="build" />
+	</target>
+</project>
