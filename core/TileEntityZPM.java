@@ -52,19 +52,20 @@ public class TileEntityZPM extends TileEntityBase {
 		if (tile == null)
 			return;
 
+		if (isStorage(tile)) {
+			if (draining) {
+				setEnergy(tile, 0);
+			} else {
+				setEnergy(tile, getMaxStorage(tile));
+			}
+
+			return;
+		}
+
 		if (tile instanceof IEnergySink) {
 			energy = Common.DEFAULT_ENERGY;
 			pax = Common.DEFAULT_PACKET_SIZE;
 			IEnergySink sink = (IEnergySink)tile;
-
-			if (isStorage(tile)) {
-				int maxStorage = getMaxStorage(tile);
-				energy = maxStorage - getEnergy(tile);
-				pax = getOutput(tile);
-
-				if (energy > maxStorage / 20)
-					energy = maxStorage / 20;
-			}
 
 			while (energy > 0 && sink.demandsEnergy()) {
 				sink.injectEnergy(dir.getInverse(), pax);
