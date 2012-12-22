@@ -50,10 +50,10 @@ public class TileEntityBase extends TileEntity {
 	}
 
 	public final void sendUpdateToServer() {
-		mod_ZPM.getInstance().proxy.sendPacketToServer(buildUpdatePacket(false));
+		mod_ZPM.instance().sendPacketToServer(buildUpdatePacket(false));
 	}
 
 	public final void sendUpdateToPlayer(String player) {
-		mod_ZPM.getInstance().proxy.sendPacketToPlayer(player, buildUpdatePacket(true));
+		mod_ZPM.instance().sendPacketToPlayer(player, buildUpdatePacket(true));
 	}
 }

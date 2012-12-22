@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 public class BlockZPM extends BlockContainer {
 	private int texBase = 0;
+	private int renderType = 0;
 	private int modelId = 0;
 
 	public BlockZPM(int id, Material mat) {
@@ -21,26 +22,36 @@ public class BlockZPM extends BlockContainer {
 		setHardness(0.5F);
 		setStepSound(Block.soundMetalFootstep);
 		setBlockName("ajitek.zpm");
-		config(false);
+		config(false, false);
 	}
 
-	public void config(boolean glowing) {
+	public void config(boolean glowing, boolean item) {
+		System.out.println("CONFIG:" +
+				" glowing=" + (glowing?"yes":"no ") +
+				" item=" + (item?"yes":"no "));
 		if (!glowing) {
 			texBase = 0;
 			setLightValue(0.0F);
 		} else {
 			texBase = 16;
-			setLightValue(0.7F);
+			setLightValue(0.8F);
+		}
+
+		if (item) {
+			renderType = 0;
+		} else {
+			renderType = modelId;
 		}
 	}
 
 	@Override
 	public int getRenderType() {
-		return modelId;
+		return renderType;
 	}
 
 	public void setModelId(int id) {
 		modelId = id;
+		renderType = modelId;
 	}
 
 	@Override
@@ -55,7 +66,7 @@ public class BlockZPM extends BlockContainer {
 		if (ep.isSneaking())
 			return false;
 
-		ep.openGui(mod_ZPM.getInstance(), 0, w, x, y, z);
+		ep.openGui(mod_ZPM.instance(), 0, w, x, y, z);
 		return true;
 	}
 
