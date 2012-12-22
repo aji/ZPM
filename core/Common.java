@@ -59,6 +59,9 @@ public class Common {
 
 		ModLoader.addLocalization("item.ajitek.zpm", Common.ZPM_NAME);
 		ModLoader.addLocalization("tile.ajitek.zpm.name", Common.ZPM_NAME);
+
+		ModLoader.addLocalization("ajitek.zpm.draining", "ZPM set to drain");
+		ModLoader.addLocalization("ajitek.zpm.filling", "ZPM set to fill");
 	}
 
 }

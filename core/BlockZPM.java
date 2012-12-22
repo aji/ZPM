@@ -76,6 +76,14 @@ public class BlockZPM extends BlockContainer {
 		zpm = (TileEntityZPM)tile;
 		zpm.setDraining(!zpm.getDraining());
 
+		if (!w.isRemote) {
+			if (zpm.getDraining()) {
+				ep.addChatMessage("ajitek.zpm.draining");
+			} else {
+				ep.addChatMessage("ajitek.zpm.filling");
+			}
+		}
+
 		return true;
 	}
 
