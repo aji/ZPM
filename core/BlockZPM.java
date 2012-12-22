@@ -27,9 +27,6 @@ public class BlockZPM extends BlockContainer {
 	}
 
 	public void config(boolean glowing, boolean item) {
-		System.out.println("CONFIG:" +
-				" glowing=" + (glowing?"yes":"no ") +
-				" item=" + (item?"yes":"no "));
 		if (!glowing) {
 			texBase = 0;
 			setLightValue(0.0F);
