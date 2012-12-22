@@ -19,7 +19,7 @@ public class BlockZPM extends BlockContainer {
 
 	public BlockZPM(int id, Material mat) {
 		super(id, mat);
-		setHardness(0.5F);
+		setHardness(2.0F);
 		setStepSound(Block.soundMetalFootstep);
 		setBlockName("ajitek.zpm");
 		setRequiresSelfNotify();
