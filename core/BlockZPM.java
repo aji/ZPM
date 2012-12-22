@@ -58,7 +58,7 @@ public class BlockZPM extends BlockContainer {
 	public int getBlockTextureFromSideAndMetadata(int side, int meta) {
 		if (side < 2)
 			return texBase;
-		return texBase + 1;
+		return texBase + meta + 1;
 	}
 
 	@Override

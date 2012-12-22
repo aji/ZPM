@@ -26,6 +26,7 @@ public class GuiZPM extends GuiBase
 	@Override
 	public void onGuiClosed() {
 		zpm.sendUpdateToServer();
+		zpm.updateMetadata();
 	}
 
 	@Override

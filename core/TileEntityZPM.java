@@ -87,6 +87,11 @@ public class TileEntityZPM extends TileEntityBase {
 		}
 	}
 
+	public void updateMetadata() {
+		worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, someData % 4);
+		worldObj.markBlockNeedsUpdate(xCoord, yCoord, zCoord);
+	}
+
 	/* Network stuff */
 
 	@Override
@@ -103,6 +108,7 @@ public class TileEntityZPM extends TileEntityBase {
 	public void handleUpdatePacket(NetworkManager net, DataInputStream in, boolean isServer)
 	throws IOException {
 		someData = in.readInt();
+		updateMetadata();
 	}
 
 	@Override
