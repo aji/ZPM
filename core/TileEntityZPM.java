@@ -16,30 +16,13 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
 public class TileEntityZPM extends TileEntityBase {
-	public int someData = -1;
+	/* cached from metadata */
+	private boolean draining;
+	private boolean redstone;
 
 	public TileEntityZPM() {
 		super();
 		initReflection();
-
-		someData = 50;
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
-
-		if (nbt.hasKey("someData")) {
-			someData = nbt.getInteger("someData");
-		} else {
-			someData = 50;
-		}
-	}
-
-	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
-		nbt.setInteger("someData", someData);
 	}
 
 	@Override
@@ -49,6 +32,9 @@ public class TileEntityZPM extends TileEntityBase {
 
 	@Override
 	public void updateEntity() {
+		/* read metadata every update until we find a better way to go about this */
+		readMetadata();
+
 		chargeToward(Direction.XN);
 		chargeToward(Direction.XP);
 		chargeToward(Direction.YN);
@@ -87,9 +73,34 @@ public class TileEntityZPM extends TileEntityBase {
 		}
 	}
 
-	public void updateMetadata() {
-		worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, someData % 4);
-		worldObj.markBlockNeedsUpdate(xCoord, yCoord, zCoord);
+	public void setAction(boolean drain, boolean red) {
+		worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, (drain?1:0) + (red?2:0));
+
+		draining = drain;
+		redstone = red;
+	}
+
+	public void readMetadata() {
+		int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+
+		draining = (meta & 1) == 1;
+		redstone = (meta & 2) == 2;
+	}
+
+	public void setDraining(boolean drain) {
+		setAction(drain, redstone);
+	}
+
+	public void setRedstone(boolean red) {
+		setAction(draining, red);
+	}
+
+	public boolean getDraining() {
+		return draining;
+	}
+
+	public boolean getRedstone() {
+		return redstone;
 	}
 
 	/* Network stuff */
@@ -101,20 +112,32 @@ public class TileEntityZPM extends TileEntityBase {
 
 	@Override
 	public void clientGuiReinit() {
-		someData = -1;
 	}
 
 	@Override
 	public void handleUpdatePacket(NetworkManager net, DataInputStream in, boolean isServer)
 	throws IOException {
-		someData = in.readInt();
-		updateMetadata();
+		if (!isServer)
+			return;
+
+		/* We do it this way to ensure the arguments are evaluated
+		   in the right order. I don't know what order Java
+		   evaluates arguments, but I don't feel like digging
+		   up the spec right now. */
+		boolean drain = in.readBoolean();
+		boolean red = in.readBoolean();
+
+		setAction(drain, red);
 	}
 
 	@Override
 	public void fillUpdatePacket(DataOutputStream out, boolean isServer)
 	throws IOException {
-		out.writeInt(someData);
+		if (isServer)
+			return;
+
+		out.writeBoolean(draining);
+		out.writeBoolean(redstone);
 	}
 
 

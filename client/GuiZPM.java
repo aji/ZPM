@@ -11,11 +11,14 @@ public class GuiZPM extends GuiBase
 {
 	protected TileEntityZPM zpm;
 
-	protected int xSize = 212;
-	protected int ySize = 34;
+	protected int xSize = 118;
+	protected int ySize = 58;
 
-	protected int buttonWide = 35;
+	protected int buttonWide = 104;
 	protected final int buttonHigh = 20;
+
+	protected GuiButton drainingBtn;
+	protected GuiButton redstoneBtn;
 
 	@Override
 	public void setTileEntity(TileEntityBase teb) {
@@ -24,30 +27,18 @@ public class GuiZPM extends GuiBase
 	}
 
 	@Override
-	public void onGuiClosed() {
-		zpm.sendUpdateToServer();
-		zpm.updateMetadata();
-	}
-
-	@Override
 	public void drawScreen(int x, int y, float z) {
 		int tex = mc.renderEngine.getTexture(Common.GUI_PNG);
 		int dx = (width - xSize) / 2;
 		int dy = (height - ySize) / 2;
+
+		updateLabels();
 
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		mc.renderEngine.bindTexture(tex);
 		drawTexturedModalRect(dx, dy, 0, 0, xSize, ySize);
 
 		super.drawScreen(x, y, z);
-
-		String s = Integer.toString(zpm.someData) + "%";
-		if (zpm.someData < 0)
-			s = "";
-
-		int wide = 2 * fontRenderer.getStringWidth(s) - fontRenderer.getStringWidth("100%");
-		int high = fontRenderer.FONT_HEIGHT;
-		fontRenderer.drawString(s, (width - wide) / 2, (height - high) / 2, 0);
 	}
 
 	@Override
@@ -58,29 +49,38 @@ public class GuiZPM extends GuiBase
 	@Override
 	public void initGui() {
 		int dx = (width - xSize) / 2;
-		int y = 7 + (height - ySize) / 2;
+		int dy = (height - ySize) / 2;
 
 		/* these coords are from the .png */
-		addButton(-10, dx+  7, y, "-10");
-		addButton( -1, dx+ 45, y,  "-1");
-		addButton(  1, dx+132, y,  "+1");
-		addButton( 10, dx+170, y, "+10");
+		drainingBtn = addButton(0, dx+7, dy+7);
+		redstoneBtn = addButton(1, dx+7, dy+31);
+
+		updateLabels();
 	}
 
-	protected void addButton(int id, int x, int y, String s) {
-		controlList.add(new GuiButton(id, x, y, buttonWide + 1, buttonHigh, s));
+	protected GuiButton addButton(int id, int x, int y) {
+		GuiButton btn = new GuiButton(id, x, y, buttonWide + 1, buttonHigh, "");
+		controlList.add(btn);
+		return btn;
+	}
+
+	protected void updateLabels() {
+		drainingBtn.displayString = (zpm.getDraining() ? "Draining" : "Filling");
+		redstoneBtn.displayString = (zpm.getRedstone() ? "Redstone: ON" : "Redstone: OFF");
 	}
 
 	@Override
 	protected void actionPerformed(GuiButton btn) {
-		if (zpm.someData < 0)
-			return;
+		switch (btn.id) {
+		case 0:
+			zpm.setDraining(!zpm.getDraining());
+			break;
+		case 1:
+			zpm.setRedstone(!zpm.getRedstone());
+			break;
+		}
 
-		zpm.someData += btn.id;
-		if (zpm.someData < 0)
-			zpm.someData = 0;
-		if (zpm.someData > 100)
-			zpm.someData = 100;
+		zpm.sendUpdateToServer();
 	}
 
 }

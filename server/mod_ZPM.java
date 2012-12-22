@@ -75,7 +75,7 @@ public class mod_ZPM extends NetworkMod implements IConnectionHandler, IGuiHandl
 			TileEntity tile = world.getBlockTileEntity(x, y, z);
 
 			if (tile != null && tile instanceof TileEntityBase)
-				((TileEntityBase)tile).handleUpdatePacket(net, in, false);
+				((TileEntityBase)tile).handleUpdatePacket(net, in, true);
 		}
 	}
 

@@ -22,6 +22,7 @@ public class BlockZPM extends BlockContainer {
 		setHardness(0.5F);
 		setStepSound(Block.soundMetalFootstep);
 		setBlockName("ajitek.zpm");
+		setRequiresSelfNotify();
 		config(false, false);
 	}
 
