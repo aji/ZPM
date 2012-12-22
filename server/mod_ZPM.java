@@ -31,9 +31,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 public class mod_ZPM extends NetworkMod implements IConnectionHandler, IGuiHandler, IPacketHandler {
-	public final static String NAME = "ZPM";
-	public final static String VERSION = "1.2dev";
-
 	private static mod_ZPM INSTANCE = null;
 
 	public static mod_ZPM instance() {
@@ -53,7 +50,7 @@ public class mod_ZPM extends NetworkMod implements IConnectionHandler, IGuiHandl
 
 	@Override
 	public String getVersion() {
-		return "v" + mod_ZPM.VERSION;
+		return "v" + Common.VERSION;
 	}
 
 
