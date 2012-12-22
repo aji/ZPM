@@ -16,6 +16,9 @@ public class Common {
 	public static final String BLOCK_PNG = "/net/ajitek/mc/zpm/block.png";
 	public static final String GUI_PNG = "/net/ajitek/mc/zpm/gui.png";
 
+	public static String ZPM_MESSAGE_DRAINING = "ZPM set to drain";
+	public static String ZPM_MESSAGE_FILLING = "ZPM set to fill";
+
 	public static int ZPM_ID = 500;
 	public static String ZPM_NAME = "Zero-Point Module";
 
@@ -47,6 +50,14 @@ public class Common {
 		prop.comment = "Default amount of EU/t from the ZPM (broken into smaller packets)";
 		DEFAULT_ENERGY = prop.getInt(4096);
 
+		prop = config.getOrCreateProperty("draining", "message", ZPM_MESSAGE_DRAINING);
+		prop.comment = "The message to show when the unit is set to drain";
+		ZPM_MESSAGE_DRAINING = prop.value;
+
+		prop = config.getOrCreateProperty("filling", "message", ZPM_MESSAGE_FILLING);
+		prop.comment = "The message to show when the unit is set to fill";
+		ZPM_MESSAGE_FILLING = prop.value;
+
 		config.save();
 	}
 
@@ -60,8 +71,8 @@ public class Common {
 		ModLoader.addLocalization("item.ajitek.zpm", Common.ZPM_NAME);
 		ModLoader.addLocalization("tile.ajitek.zpm.name", Common.ZPM_NAME);
 
-		ModLoader.addLocalization("ajitek.zpm.draining", "ZPM set to drain");
-		ModLoader.addLocalization("ajitek.zpm.filling", "ZPM set to fill");
+		ModLoader.addLocalization("ajitek.zpm.draining", ZPM_MESSAGE_DRAINING);
+		ModLoader.addLocalization("ajitek.zpm.filling", ZPM_MESSAGE_FILLING);
 	}
 
 }
