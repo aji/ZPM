@@ -61,7 +61,7 @@ public class TileEntityZPM extends TileEntityBase {
 			return;
 		}
 
-		if (tile instanceof IEnergySink) {
+		if (tile instanceof IEnergySink && !draining) {
 			energy = Common.DEFAULT_ENERGY;
 			pax = Common.DEFAULT_PACKET_SIZE;
 			IEnergySink sink = (IEnergySink)tile;
