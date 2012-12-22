@@ -1,13 +1,15 @@
 package net.ajitek.mc.zpm.proxy;
 
-import net.ajitek.mc.zpm.core.TileEntityBase;
-import net.ajitek.mc.zpm.core.Common;
-import net.ajitek.mc.zpm.core.mod_ZPM;
+import net.ajitek.mc.zpm.core.*;
 import net.minecraft.client.Minecraft;
+import net.minecraft.src.BaseMod;
 import net.minecraft.src.forge.IGuiHandler;
 import net.minecraft.src.forge.IPacketHandler;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
+import net.minecraft.src.RenderBlocks;
+import net.minecraft.src.IBlockAccess;
+import net.minecraft.src.Block;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.NetworkManager;
 import net.minecraft.src.Packet250CustomPayload;
@@ -24,6 +26,25 @@ import java.io.DataOutputStream;
 public class Proxy implements IGuiHandler, IPacketHandler {
 	public static File getConfig() {
 		return new File(new File(Minecraft.getMinecraftDir(), "config"), "ZPM.conf");
+	}
+
+	public void registerRenderers() {
+		int id;
+
+		id = FMLClientHandler.instance().obtainBlockModelIdFor(mod_ZPM.getInstance(), true);
+		Common.blockZPM.setModelId(id);
+	}
+
+	public boolean renderWorldBlock(Object rObj, IBlockAccess world, int x, int y, int z,
+					Block block, int modelId) {
+		RenderBlocks renderer = (RenderBlocks)rObj;
+
+		renderer.renderStandardBlock(block, x, y, z);
+		Common.blockZPM.config(true);
+		renderer.renderStandardBlock(block, x, y, z);
+		Common.blockZPM.config(false);
+
+		return true;
 	}
 
 	public Object getGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {

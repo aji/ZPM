@@ -1,9 +1,6 @@
 package net.ajitek.mc.zpm.proxy;
 
-import net.ajitek.mc.zpm.core.TileEntityZPM;
-import net.ajitek.mc.zpm.core.TileEntityBase;
-import net.ajitek.mc.zpm.core.Common;
-import net.ajitek.mc.zpm.core.mod_ZPM;
+import net.ajitek.mc.zpm.core.*;
 import net.minecraft.src.ModLoader;
 import net.minecraft.src.GuiScreen;
 import net.minecraft.src.GuiButton;

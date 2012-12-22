@@ -1,5 +1,6 @@
 package net.ajitek.mc.zpm.core;
 
+import net.ajitek.mc.zpm.proxy.*;
 import net.minecraft.src.Block;
 import net.minecraft.src.Item;
 
@@ -15,6 +16,6 @@ public class Common {
 	public static int DEFAULT_PACKET_SIZE = 32;
 	public static int DEFAULT_ENERGY = 4096;
 
-	public static Block blockZPM;
+	public static BlockZPM blockZPM;
 	public static Item itemBlockZPM;
 }

@@ -1,5 +1,6 @@
-package net.ajitek.mc.zpm.core;
+package net.ajitek.mc.zpm.proxy;
 
+import net.ajitek.mc.zpm.core.*;
 import net.minecraft.src.Block;
 import net.minecraft.src.Material;
 import net.minecraft.src.Item;
@@ -7,13 +8,15 @@ import net.minecraft.src.ItemBlock;
 import net.minecraft.src.ModLoader;
 import net.minecraft.src.NetworkManager;
 import net.minecraft.src.Packet1Login;
-import net.ajitek.mc.zpm.proxy.Proxy;
+import net.minecraft.src.IBlockAccess;
+import net.minecraft.src.RenderBlocks;
 import net.minecraft.src.forge.Configuration;
 import net.minecraft.src.forge.Property;
 import net.minecraft.src.forge.MinecraftForge;
 import net.minecraft.src.forge.NetworkMod;
 import net.minecraft.src.forge.IConnectionHandler;
 import net.minecraft.src.forge.MessageManager;
+import net.ajitek.mc.zpm.proxy.Proxy;
 import java.io.File;
 
 public class mod_ZPM extends NetworkMod implements IConnectionHandler {
@@ -76,6 +79,8 @@ public class mod_ZPM extends NetworkMod implements IConnectionHandler {
 
 		ModLoader.addLocalization("item.ajitek.zpm", Common.ZPM_NAME);
 		ModLoader.addLocalization("tile.ajitek.zpm.name", Common.ZPM_NAME);
+
+		proxy.registerRenderers();
 	}
 
 	@Override
@@ -83,6 +88,10 @@ public class mod_ZPM extends NetworkMod implements IConnectionHandler {
 		return "v" + mod_ZPM.VERSION;
 	}
 
+	public boolean renderWorldBlock(RenderBlocks renderer, IBlockAccess world, int x, int y, int z,
+					Block block, int modelId) {
+		return proxy.renderWorldBlock(renderer, world, x, y, z, block, modelId);
+	}
 
 	/* IConnectionHandler */
 

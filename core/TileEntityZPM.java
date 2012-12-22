@@ -1,5 +1,6 @@
 package net.ajitek.mc.zpm.core;
 
+import net.ajitek.mc.zpm.proxy.*;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.ic2.api.Direction;
 import net.minecraft.src.ic2.api.IEnergyStorage;

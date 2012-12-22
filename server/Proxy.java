@@ -2,9 +2,12 @@ package net.ajitek.mc.zpm.proxy;
 
 import net.ajitek.mc.zpm.core.TileEntityBase;
 import net.ajitek.mc.zpm.core.Common;
+import net.minecraft.src.BaseMod;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.EntityPlayerMP;
 import net.minecraft.src.World;
+import net.minecraft.src.Block;
+import net.minecraft.src.IBlockAccess;
 import net.minecraft.src.NetServerHandler;
 import net.minecraft.src.NetworkManager;
 import net.minecraft.src.TileEntity;
@@ -23,6 +26,13 @@ import java.io.DataOutputStream;
 public class Proxy implements IGuiHandler, IPacketHandler {
 	public static File getConfig() {
 		return new File(new File(".", "config"), "ZPM.conf");
+	}
+
+	public void registerRenderers() {
+	}
+
+	public boolean renderWorldBlock(Object r, IBlockAccess w, int x, int y, int z, Block b, int id) {
+		return true;
 	}
 
 	public Object getGuiElement(int ID, EntityPlayer p, World world, int x, int y, int z) {

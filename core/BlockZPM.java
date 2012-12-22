@@ -1,5 +1,6 @@
 package net.ajitek.mc.zpm.core;
 
+import net.ajitek.mc.zpm.proxy.*;
 import net.minecraft.src.Block;
 import net.minecraft.src.BlockContainer;
 import net.minecraft.src.ItemStack;
@@ -12,13 +13,34 @@ import net.minecraft.src.EntityPlayer;
 import java.util.ArrayList;
 
 public class BlockZPM extends BlockContainer {
-	private final int texBase = 0;
+	private int texBase = 0;
+	private int modelId = 0;
 
 	public BlockZPM(int id, Material mat) {
 		super(id, mat);
 		setHardness(0.5F);
 		setStepSound(Block.soundMetalFootstep);
 		setBlockName("ajitek.zpm");
+		config(false);
+	}
+
+	public void config(boolean glowing) {
+		if (!glowing) {
+			texBase = 0;
+			setLightValue(0.0F);
+		} else {
+			texBase = 16;
+			setLightValue(0.7F);
+		}
+	}
+
+	@Override
+	public int getRenderType() {
+		return modelId;
+	}
+
+	public void setModelId(int id) {
+		modelId = id;
 	}
 
 	@Override
