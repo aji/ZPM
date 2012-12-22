@@ -11,14 +11,13 @@ public class GuiZPM extends GuiBase
 {
 	protected TileEntityZPM zpm;
 
-	protected int xSize = 118;
-	protected int ySize = 58;
+	protected int xSize = 108;
+	protected int ySize = 34;
 
-	protected int buttonWide = 104;
+	protected int buttonWide = 94;
 	protected final int buttonHigh = 20;
 
 	protected GuiButton drainingBtn;
-	protected GuiButton redstoneBtn;
 
 	@Override
 	public void setTileEntity(TileEntityBase teb) {
@@ -53,7 +52,6 @@ public class GuiZPM extends GuiBase
 
 		/* these coords are from the .png */
 		drainingBtn = addButton(0, dx+7, dy+7);
-		redstoneBtn = addButton(1, dx+7, dy+31);
 
 		updateLabels();
 	}
@@ -66,7 +64,6 @@ public class GuiZPM extends GuiBase
 
 	protected void updateLabels() {
 		drainingBtn.displayString = (zpm.getDraining() ? "Draining" : "Filling");
-		redstoneBtn.displayString = (zpm.getRedstone() ? "Redstone: ON" : "Redstone: OFF");
 	}
 
 	@Override
@@ -74,9 +71,6 @@ public class GuiZPM extends GuiBase
 		switch (btn.id) {
 		case 0:
 			zpm.setDraining(!zpm.getDraining());
-			break;
-		case 1:
-			zpm.setRedstone(!zpm.getRedstone());
 			break;
 		}
 

@@ -18,7 +18,6 @@ import java.io.DataOutputStream;
 public class TileEntityZPM extends TileEntityBase {
 	/* cached from metadata */
 	private boolean draining;
-	private boolean redstone;
 
 	public TileEntityZPM() {
 		super();
@@ -74,41 +73,35 @@ public class TileEntityZPM extends TileEntityBase {
 		}
 	}
 
-	public void setAction(boolean drain, boolean red) {
-		worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, (drain?1:0) + (red?2:0));
+	/* This seemingly unnecessary cascade of functions comes from a
+	   time where there were two booleans with individual accessors */
+
+	public void setAction(boolean drain) {
+		worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, (drain?1:0));
 
 		draining = drain;
-		redstone = red;
 	}
 
 	public void readMetadata() {
 		int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
 
 		draining = (meta & 1) == 1;
-		redstone = (meta & 2) == 2;
 	}
 
 	public void setDraining(boolean drain) {
-		setAction(drain, redstone);
-	}
-
-	public void setRedstone(boolean red) {
-		setAction(draining, red);
+		setAction(drain);
 	}
 
 	public boolean getDraining() {
 		return draining;
 	}
 
-	public boolean getRedstone() {
-		return redstone;
-	}
-
 	/* Network stuff */
 
 	@Override
 	public String getGuiClassName() {
-		return "net.ajitek.mc.zpm.proxy.GuiZPM";
+		//return "net.ajitek.mc.zpm.proxy.GuiZPM";
+		return "";
 	}
 
 	@Override
@@ -126,9 +119,8 @@ public class TileEntityZPM extends TileEntityBase {
 		   evaluates arguments, but I don't feel like digging
 		   up the spec right now. */
 		boolean drain = in.readBoolean();
-		boolean red = in.readBoolean();
 
-		setAction(drain, red);
+		setAction(drain);
 	}
 
 	@Override
@@ -138,7 +130,6 @@ public class TileEntityZPM extends TileEntityBase {
 			return;
 
 		out.writeBoolean(draining);
-		out.writeBoolean(redstone);
 	}
 
 

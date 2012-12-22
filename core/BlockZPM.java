@@ -64,10 +64,21 @@ public class BlockZPM extends BlockContainer {
 
 	@Override
 	public boolean blockActivated(World w, int x, int y, int z, EntityPlayer ep) {
+		TileEntity tile;
+		TileEntityZPM zpm;
+
 		if (ep.isSneaking())
 			return false;
 
-		ep.openGui(mod_ZPM.instance(), 0, w, x, y, z);
+		tile = w.getBlockTileEntity(x, y, z);
+		if (!(tile instanceof TileEntityZPM))
+			return false;
+
+		//ep.openGui(mod_ZPM.instance(), 0, w, x, y, z);
+
+		zpm = (TileEntityZPM)tile;
+		zpm.setDraining(!zpm.getDraining());
+
 		return true;
 	}
 
