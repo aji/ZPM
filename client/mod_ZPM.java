@@ -18,6 +18,7 @@ import net.minecraft.src.RenderBlocks;
 import net.minecraft.src.forge.Configuration;
 import net.minecraft.src.forge.Property;
 import net.minecraft.src.forge.MinecraftForge;
+import net.minecraft.src.forge.MinecraftForgeClient;
 import net.minecraft.src.forge.NetworkMod;
 import net.minecraft.src.forge.IConnectionHandler;
 import net.minecraft.src.forge.IGuiHandler;
@@ -43,6 +44,9 @@ public class mod_ZPM extends NetworkMod implements IConnectionHandler, IGuiHandl
 
 		Common.initConfig(new File(new File(Minecraft.getMinecraftDir(), "config"), "ZPM.conf"));
 		Common.initBlock();
+
+		MinecraftForgeClient.preloadTexture(Common.BLOCK_PNG);
+		//MinecraftForgeClient.preloadTexture(Common.GUI_PNG);
 
 		MinecraftForge.setGuiHandler(this, this);
 		MinecraftForge.registerConnectionHandler(this);
