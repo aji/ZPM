@@ -44,7 +44,6 @@ public class mod_ZPM extends NetworkMod implements IConnectionHandler, IGuiHandl
 
 		Common.initConfig(new File(new File(Minecraft.getMinecraftDir(), "config"), "ZPM.conf"));
 		Common.initBlock();
-		Common.initFillers();
 
 		MinecraftForgeClient.preloadTexture(Common.BLOCK_PNG);
 		//MinecraftForgeClient.preloadTexture(Common.GUI_PNG);

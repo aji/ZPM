@@ -18,9 +18,7 @@ public class FillerIC2 implements IFiller {
 			TEEB_output = TEEB.getField("output");
 			TEEB_maxStorage = TEEB.getField("maxStorage");
 			TEEB_energy = TEEB.getField("energy");
-			System.out.println("ZPM: Loaded IC2 filler");
 		} catch (Exception e) {
-			System.out.println("ZPM: Could not load IC2 filler");
 			return false;
 		}
 

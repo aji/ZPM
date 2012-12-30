@@ -7,12 +7,14 @@ import net.minecraft.src.TileEntity;
 public final class FillerRegistry {
 	private static ArrayList<IFiller> fillers = new ArrayList<IFiller>();
 
-	public static void add(IFiller filler) {
+	public static boolean add(IFiller filler) {
 		if (!filler.initialize())
-			return;
+			return false;
 
 		if (!fillers.contains(filler))
 			fillers.add(0, filler);
+
+		return true;
 	}
 
 	public static void fill(ZPMDirection dir, TileEntity tile) {

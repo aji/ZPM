@@ -76,10 +76,34 @@ public class Common {
 
 		ModLoader.addLocalization("ajitek.zpm.draining", ZPM_MESSAGE_DRAINING);
 		ModLoader.addLocalization("ajitek.zpm.filling", ZPM_MESSAGE_FILLING);
+
+		addFiller("net.ajitek.mc.zpm.core.FillerIC2");
+		addFiller("net.ajitek.mc.zpm.core.FillerRP2");
 	}
 
-	public static void initFillers() {
-		FillerRegistry.add(new FillerIC2());
+	public static void addFiller(String className) {
+		Class cls;
+
+		try {
+			cls = Class.forName(className);
+			String s = cls.getSimpleName();
+
+			if (!IFiller.class.isAssignableFrom(cls)) {
+				System.out.println("ZPM: " + className + " is not an IFiller");
+				return;
+			}
+
+			if (FillerRegistry.add((IFiller)cls.newInstance())) {
+				System.out.println("ZPM: Loaded " + s);
+			} else {
+				System.out.println("ZPM: Failed to initialize " + s);
+			}
+		} catch (ClassNotFoundException e) {
+			System.out.println("ZPM: Could not find filler " + className);
+		} catch (Exception e) {
+			System.out.println("ZPM: Error loading " + className);
+			System.out.println("ZPM:    " + e.getMessage());
+		}
 	}
 
 }
