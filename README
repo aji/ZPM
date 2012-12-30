@@ -1,18 +1,71 @@
-ZPM -- Zero-Point Module
 
-ZPM charges all neighboring energy sinks (anything with the IEnergySink
-interface which includes all IC2 machines and storage blocks.) Storage
-blocks (the MFSU, MFE, and BatBox) are filled at a rate of 1/20th their
-capacity per tick, meaning an empty storage block will be filled in a
-single second.
+			ZPM 1.3dev -- Zero-Point Module
+			      For Minecraft 1.2.5
 
-Contact aji on EsperNet if you have questions. If you're interested in
-Minecraft modding, you should be there anyway.
 
-Symlinks:
-  core -> src/minecraft/net/ajitek/mc/zpm/core
-  core -> src/minecraft_server/net/ajitek/mc/zpm/core
-  client -> src/minecraft/net/ajitek/mc/zpm/proxy
-  server -> src/minecraft_server/net/ajitek/mc/zpm/proxy
-  mcmod.info -> reobf/minecraft/mcmod.info
-  mcmod.info -> reobf/minecraft_server/mcmod.info
+INTRODUCTION
+
+  This mod adds a block to the game which can either drain or fill
+  adjacent energy storage units. The exact definition of "drain" or "fill"
+  depends on the storage block it is targeted at, but the basic principle
+  is the same. The block has no recipe. This is because it is intended
+  for creative-mode play only. Right clicking the block will toggle it
+  between drain and fill modes. This mod is written for Minecraft 1.2.5,
+  and requires Minecraft Forge.
+
+  The following storage blocks are currently supported by ZPM in any
+  official capacity:
+
+     IC2 MFE, MFSU, and BatBox
+       In drain mode, these blocks are kept completely empty. In fill mode,
+       the blocks are kept completely full.
+
+     IC2 Machines (anything implementing IEnergySink, eg. the macerator)
+       In drain mode, nothing happens. In fill mode, up to 4096 EU/t is
+       pumped into the machine in packets of 32 EU until the machine is
+       full. (Both of these numbers can be configured in the configuration
+       file)
+
+
+CONTACT
+
+  Contact aji on EsperNet if you have questions. If you're interested in
+  Minecraft modding, you should be there anyway.
+
+
+BUILDING
+
+  Create the following symlinks in your MCP directory.
+
+    core -> src/minecraft/net/ajitek/mc/zpm/core
+    core -> src/minecraft_server/net/ajitek/mc/zpm/core
+    client -> src/minecraft/net/ajitek/mc/zpm/proxy
+    server -> src/minecraft_server/net/ajitek/mc/zpm/proxy
+    mcmod.info -> reobf/minecraft/mcmod.info
+    mcmod.info -> reobf/minecraft_server/mcmod.info
+
+  ZPM currently requires the IC2 API to compile.
+
+
+LICENSE
+
+  Copyright (C) 2012-2013 Alex Iadicicco
+
+  Permission is hereby granted, free of charge, to any person obtaining
+  a copy of this software and associated documentation files (the
+  "Software"), to deal in the Software without restriction, including
+  without limitation the rights to use, copy, modify, merge, publish,
+  distribute, sublicense, and/or sell copies of the Software, and to
+  permit persons to whom the Software is furnished to do so, subject to
+  the following conditions:
+
+  The above copyright notice and this permission notice shall be included
+  in all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
+  KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+  WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+  LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+  OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
