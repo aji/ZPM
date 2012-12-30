@@ -43,6 +43,7 @@ public class mod_ZPM extends NetworkMod implements IConnectionHandler, IGuiHandl
 
 		Common.initConfig(new File(new File(".", "config"), "ZPM.conf"));
 		Common.initBlock();
+		Common.initFillers();
 
 		MinecraftForge.setGuiHandler(this, this);
 		MinecraftForge.registerConnectionHandler(this);

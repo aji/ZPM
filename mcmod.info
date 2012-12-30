@@ -2,7 +2,7 @@
 	"modid": "mod_ZPM",
 	"name": "Zero-Point Module for IC2",
 	"description": "Creative mode-friendly additions to IndustrialCraft 2",
-	"version": "1.2",
+	"version": "1.3dev",
 	"credits": "",
 	"authors": ["aji"],
 	"logoFile": "",
@@ -10,5 +10,5 @@
 	"updateUrl": "",
 	"parent": "",
 	"screenshots": [],
-	"dependencies": ["mod_IC2","mod_MinecraftForge"]
+	"dependencies": ["mod_MinecraftForge"]
 }]

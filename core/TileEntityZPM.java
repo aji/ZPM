@@ -2,9 +2,6 @@ package net.ajitek.mc.zpm.core;
 
 import net.ajitek.mc.zpm.proxy.*;
 import net.minecraft.src.TileEntity;
-import net.minecraft.src.ic2.api.Direction;
-import net.minecraft.src.ic2.api.IEnergyStorage;
-import net.minecraft.src.ic2.api.IEnergySink;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.forge.MinecraftForge;
 import net.minecraft.src.NetworkManager;
@@ -21,7 +18,6 @@ public class TileEntityZPM extends TileEntityBase {
 
 	public TileEntityZPM() {
 		super();
-		initReflection();
 	}
 
 	@Override
@@ -34,43 +30,24 @@ public class TileEntityZPM extends TileEntityBase {
 		/* read metadata every update until we find a better way to go about this */
 		readMetadata();
 
-		chargeToward(Direction.XN);
-		chargeToward(Direction.XP);
-		chargeToward(Direction.YN);
-		chargeToward(Direction.YP);
-		chargeToward(Direction.ZN);
-		chargeToward(Direction.ZP);
+		chargeToward(ZPMDirection.EAST);
+		chargeToward(ZPMDirection.WEST);
+		chargeToward(ZPMDirection.UP);
+		chargeToward(ZPMDirection.DOWN);
+		chargeToward(ZPMDirection.SOUTH);
+		chargeToward(ZPMDirection.NORTH);
 	}
 
-	public void chargeToward(Direction dir) {
+	public void chargeToward(ZPMDirection dir) {
 		TileEntity tile;
 		int energy, pax;
 
-		tile = dir.applyToTileEntity(this);
+		tile = dir.apply(this);
 
 		if (tile == null)
 			return;
 
-		if (isStorage(tile)) {
-			if (draining) {
-				setEnergy(tile, 0);
-			} else {
-				setEnergy(tile, getMaxStorage(tile));
-			}
-
-			return;
-		}
-
-		if (tile instanceof IEnergySink && !draining) {
-			energy = Common.DEFAULT_ENERGY;
-			pax = Common.DEFAULT_PACKET_SIZE;
-			IEnergySink sink = (IEnergySink)tile;
-
-			while (energy > 0 && sink.demandsEnergy()) {
-				sink.injectEnergy(dir.getInverse(), pax);
-				energy -= pax;
-			}
-		}
+		FillerRegistry.fillOrDrain(dir, tile, !draining);
 	}
 
 	/* This seemingly unnecessary cascade of functions comes from a
@@ -132,65 +109,4 @@ public class TileEntityZPM extends TileEntityBase {
 		out.writeBoolean(draining);
 	}
 
-
-	/* Reflection, the Java equivalent of longjmp... */
-
-	private static Class TEEB = null; /* TileEntityElectricBlock */
-	private static Field TEEB_output;
-	private static Field TEEB_maxStorage;
-	private static Field TEEB_energy;
-
-	private static boolean isStorage(TileEntity tile) {
-		if (TEEB == null)
-			return false;
-
-		return TEEB.isInstance(tile);
-	}
-
-	private static int getOutput(TileEntity tile) {
-		try {
-			return TEEB_output.getInt(tile);
-		} catch (IllegalAccessException e) {
-			return Common.DEFAULT_PACKET_SIZE;
-		}
-	}
-
-	private static int getMaxStorage(TileEntity tile) {
-		try {
-			return TEEB_maxStorage.getInt(tile);
-		} catch (Exception e) {
-			return Common.DEFAULT_ENERGY;
-		}
-	}
-
-	private static int getEnergy(TileEntity tile) {
-		try {
-			return TEEB_energy.getInt(tile);
-		} catch (Exception e) {
-			return 0;
-		}
-	}
-
-	private static void setEnergy(TileEntity tile, int energy) {
-		try {
-			TEEB_energy.setInt(tile, energy);
-		} catch (Exception e) {
-			/* bleh */
-		}
-	}
-
-	private static void initReflection() {
-		if (TEEB != null)
-			return;
-
-		try {
-			TEEB = Class.forName("ic2.common.TileEntityElectricBlock");
-			TEEB_output = TEEB.getField("output");
-			TEEB_maxStorage = TEEB.getField("maxStorage");
-			TEEB_energy = TEEB.getField("energy");
-		} catch (Exception e) {
-			System.out.println("IC2 does not seem to be loaded");
-			TEEB = null;
-		}
-	}
 }

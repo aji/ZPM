@@ -12,7 +12,7 @@ import java.io.File;
 
 public class Common {
 	public static final String NAME = "ZPM";
-	public static final String VERSION = "1.2";
+	public static final String VERSION = "1.3dev";
 
 	public static final String CHANNEL = "ajitekZPM";
 
@@ -76,6 +76,10 @@ public class Common {
 
 		ModLoader.addLocalization("ajitek.zpm.draining", ZPM_MESSAGE_DRAINING);
 		ModLoader.addLocalization("ajitek.zpm.filling", ZPM_MESSAGE_FILLING);
+	}
+
+	public static void initFillers() {
+		FillerRegistry.add(new FillerIC2());
 	}
 
 }
