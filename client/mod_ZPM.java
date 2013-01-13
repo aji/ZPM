@@ -32,146 +32,146 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 public class mod_ZPM extends NetworkMod implements IConnectionHandler, IGuiHandler, IPacketHandler {
-	private static mod_ZPM INSTANCE = null;
+    private static mod_ZPM INSTANCE = null;
 
-	public static mod_ZPM instance() {
-		return INSTANCE;
-	}
+    public static mod_ZPM instance() {
+        return INSTANCE;
+    }
 
-	@Override
-	public void load() {
-		mod_ZPM.INSTANCE = this;
+    @Override
+    public void load() {
+        mod_ZPM.INSTANCE = this;
 
-		Common.initConfig(new File(new File(Minecraft.getMinecraftDir(), "config"), "ZPM.conf"));
-		Common.initBlock();
+        Common.initConfig(new File(new File(Minecraft.getMinecraftDir(), "config"), "ZPM.conf"));
+        Common.initBlock();
 
-		MinecraftForgeClient.preloadTexture(Common.BLOCK_PNG);
-		//MinecraftForgeClient.preloadTexture(Common.GUI_PNG);
+        MinecraftForgeClient.preloadTexture(Common.BLOCK_PNG);
+        //MinecraftForgeClient.preloadTexture(Common.GUI_PNG);
 
-		MinecraftForge.setGuiHandler(this, this);
-		MinecraftForge.registerConnectionHandler(this);
+        MinecraftForge.setGuiHandler(this, this);
+        MinecraftForge.registerConnectionHandler(this);
 
-		Common.blockZPM.setModelId(FMLClientHandler.instance().obtainBlockModelIdFor(this, true));
-	}
+        Common.blockZPM.setModelId(FMLClientHandler.instance().obtainBlockModelIdFor(this, true));
+    }
 
-	@Override
-	public String getVersion() {
-		return "v" + Common.VERSION;
-	}
-
-
-	/* Packeting */
-
-	public void handlePacket(NetworkManager net, DataInputStream in) throws IOException {
-		World world = FMLClientHandler.instance().getClient().theWorld;
-
-		switch (in.readByte()) {
-		case 0: /* tile entity update */
-			int x = in.readInt();
-			int y = in.readInt();
-			int z = in.readInt();
-			TileEntity tile = world.getBlockTileEntity(x, y, z);
-
-			if (tile != null && tile instanceof TileEntityBase)
-				((TileEntityBase)tile).handleUpdatePacket(net, in, false);
-		}
-	}
-
-	public void sendPacketToServer(Packet pkt) {
-		FMLClientHandler.instance().sendPacket(pkt);
-	}
-
-	public void sendPacketToPlayer(String player, Packet pkt) {
-	}
+    @Override
+    public String getVersion() {
+        return "v" + Common.VERSION;
+    }
 
 
-	/* Rendering */
+    /* Packeting */
 
-	public boolean renderWorldBlock(RenderBlocks renderer, IBlockAccess world, int x, int y, int z,
-					Block block, int modelId) {
-		renderer.renderStandardBlock(block, x, y, z);
-		Common.blockZPM.config(true, false);
-		renderer.renderStandardBlock(block, x, y, z);
-		Common.blockZPM.config(false, false);
+    public void handlePacket(NetworkManager net, DataInputStream in) throws IOException {
+        World world = FMLClientHandler.instance().getClient().theWorld;
 
-		return true;
-	}
+        switch (in.readByte()) {
+        case 0: /* tile entity update */
+            int x = in.readInt();
+            int y = in.readInt();
+            int z = in.readInt();
+            TileEntity tile = world.getBlockTileEntity(x, y, z);
 
-	public void renderInvBlock(RenderBlocks renderer, Block block, int metadata, int modelId) {
-		Common.blockZPM.config(false, true);
-		renderer.renderBlockAsItem(block, metadata, 1.0F);
-		Common.blockZPM.config(true, true);
-		renderer.renderBlockAsItem(block, metadata, 1.0F);
-		Common.blockZPM.config(false, false);
-	}
+            if (tile != null && tile instanceof TileEntityBase)
+                ((TileEntityBase)tile).handleUpdatePacket(net, in, false);
+        }
+    }
 
+    public void sendPacketToServer(Packet pkt) {
+        FMLClientHandler.instance().sendPacket(pkt);
+    }
 
-	/* IGuiHandler */
-
-	public Object getGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-		TileEntity te;
-
-		if (!world.blockExists(x, y, z))
-			return null;
-
-		te = world.getBlockTileEntity(x, y, z);
-
-		if (te == null || !(te instanceof TileEntityBase))
-			return null;
-
-		TileEntityBase teb = (TileEntityBase)te;
-		String guiClassName = teb.getGuiClassName();
-		Class guiClass;
-		Object guiObject;
-
-		if (guiClassName == null)
-			return null;
-
-		try {
-			guiClass = Class.forName(guiClassName);
-			guiObject = guiClass.newInstance();
-		} catch (Exception e) {
-			/* TODO: be smarter about this */
-			return null;
-		}
-
-		if (!(guiObject instanceof GuiBase))
-			return null;
-
-		((GuiBase)guiObject).setTileEntity(teb);
-
-		if (world.isRemote)
-			teb.clientGuiReinit();
-
-		return guiObject;
-	}
+    public void sendPacketToPlayer(String player, Packet pkt) {
+    }
 
 
-	/* IPacketHandler */
+    /* Rendering */
 
-	public void onPacketData(NetworkManager net, String channel, byte[] data) {
-		DataInputStream in = new DataInputStream(new ByteArrayInputStream(data));
+    public boolean renderWorldBlock(RenderBlocks renderer, IBlockAccess world, int x, int y, int z,
+                    Block block, int modelId) {
+        renderer.renderStandardBlock(block, x, y, z);
+        Common.blockZPM.config(true, false);
+        renderer.renderStandardBlock(block, x, y, z);
+        Common.blockZPM.config(false, false);
 
-		if (!channel.equals(Common.CHANNEL))
-			return; /* shouldn't happen, but just in case */
+        return true;
+    }
 
-		try {
-			handlePacket(net, in);
-		} catch (Exception e) {
-			return;
-		}
-	}
+    public void renderInvBlock(RenderBlocks renderer, Block block, int metadata, int modelId) {
+        Common.blockZPM.config(false, true);
+        renderer.renderBlockAsItem(block, metadata, 1.0F);
+        Common.blockZPM.config(true, true);
+        renderer.renderBlockAsItem(block, metadata, 1.0F);
+        Common.blockZPM.config(false, false);
+    }
 
 
-	/* IConnectionHandler */
+    /* IGuiHandler */
 
-	public void onConnect(NetworkManager net) {}
+    public Object getGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+        TileEntity te;
 
-	public void onLogin(NetworkManager net, Packet1Login login) {
-		MessageManager.getInstance().registerChannel(net, this, Common.CHANNEL);
-	}
+        if (!world.blockExists(x, y, z))
+            return null;
 
-	public void onDisconnect(NetworkManager net, String message, Object[] args) {
-		MessageManager.getInstance().unregisterChannel(net, this, Common.CHANNEL);
-	}
+        te = world.getBlockTileEntity(x, y, z);
+
+        if (te == null || !(te instanceof TileEntityBase))
+            return null;
+
+        TileEntityBase teb = (TileEntityBase)te;
+        String guiClassName = teb.getGuiClassName();
+        Class guiClass;
+        Object guiObject;
+
+        if (guiClassName == null)
+            return null;
+
+        try {
+            guiClass = Class.forName(guiClassName);
+            guiObject = guiClass.newInstance();
+        } catch (Exception e) {
+            /* TODO: be smarter about this */
+            return null;
+        }
+
+        if (!(guiObject instanceof GuiBase))
+            return null;
+
+        ((GuiBase)guiObject).setTileEntity(teb);
+
+        if (world.isRemote)
+            teb.clientGuiReinit();
+
+        return guiObject;
+    }
+
+
+    /* IPacketHandler */
+
+    public void onPacketData(NetworkManager net, String channel, byte[] data) {
+        DataInputStream in = new DataInputStream(new ByteArrayInputStream(data));
+
+        if (!channel.equals(Common.CHANNEL))
+            return; /* shouldn't happen, but just in case */
+
+        try {
+            handlePacket(net, in);
+        } catch (Exception e) {
+            return;
+        }
+    }
+
+
+    /* IConnectionHandler */
+
+    public void onConnect(NetworkManager net) {}
+
+    public void onLogin(NetworkManager net, Packet1Login login) {
+        MessageManager.getInstance().registerChannel(net, this, Common.CHANNEL);
+    }
+
+    public void onDisconnect(NetworkManager net, String message, Object[] args) {
+        MessageManager.getInstance().unregisterChannel(net, this, Common.CHANNEL);
+    }
 }

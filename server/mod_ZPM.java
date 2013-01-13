@@ -31,105 +31,105 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 public class mod_ZPM extends NetworkMod implements IConnectionHandler, IGuiHandler, IPacketHandler {
-	private static mod_ZPM INSTANCE = null;
+    private static mod_ZPM INSTANCE = null;
 
-	public static mod_ZPM instance() {
-		return INSTANCE;
-	}
+    public static mod_ZPM instance() {
+        return INSTANCE;
+    }
 
-	@Override
-	public void load() {
-		mod_ZPM.INSTANCE = this;
+    @Override
+    public void load() {
+        mod_ZPM.INSTANCE = this;
 
-		Common.initConfig(new File(new File(".", "config"), "ZPM.conf"));
-		Common.initBlock();
+        Common.initConfig(new File(new File(".", "config"), "ZPM.conf"));
+        Common.initBlock();
 
-		MinecraftForge.setGuiHandler(this, this);
-		MinecraftForge.registerConnectionHandler(this);
-	}
+        MinecraftForge.setGuiHandler(this, this);
+        MinecraftForge.registerConnectionHandler(this);
+    }
 
-	@Override
-	public String getVersion() {
-		return "v" + Common.VERSION;
-	}
-
-
-	/* Packeting */
-
-	public void handlePacket(NetworkManager net, DataInputStream in) throws IOException {
-		World world;
-
-		if (!(net.getNetHandler() instanceof NetServerHandler))
-			return;
-
-		world = ((NetServerHandler)net.getNetHandler()).getPlayerEntity().worldObj;
-
-		switch (in.readByte()) {
-		case 0: /* tile entity update */
-			int x = in.readInt();
-			int y = in.readInt();
-			int z = in.readInt();
-			TileEntity tile = world.getBlockTileEntity(x, y, z);
-
-			if (tile != null && tile instanceof TileEntityBase)
-				((TileEntityBase)tile).handleUpdatePacket(net, in, true);
-		}
-	}
-
-	public void sendPacketToServer(Packet pkt) {
-	}
-
-	public void sendPacketToPlayer(String player, Packet pkt) {
-		FMLServerHandler.instance().getServer().configManager.sendPacketToPlayer(player, pkt);
-	}
+    @Override
+    public String getVersion() {
+        return "v" + Common.VERSION;
+    }
 
 
-	/* IGuiHandler */
+    /* Packeting */
 
-	public Object getGuiElement(int ID, EntityPlayer p, World world, int x, int y, int z) {
-		TileEntity te;
-		EntityPlayerMP player;
+    public void handlePacket(NetworkManager net, DataInputStream in) throws IOException {
+        World world;
 
-		if (!(p instanceof EntityPlayerMP))
-			return null;
-		if (!world.blockExists(x, y, z))
-			return null;
+        if (!(net.getNetHandler() instanceof NetServerHandler))
+            return;
 
-		player = (EntityPlayerMP)p;
-		te = world.getBlockTileEntity(x, y, z);
+        world = ((NetServerHandler)net.getNetHandler()).getPlayerEntity().worldObj;
 
-		if (te != null && te instanceof TileEntityBase)
-			((TileEntityBase)te).sendUpdateToPlayer(p.getUsername());
+        switch (in.readByte()) {
+        case 0: /* tile entity update */
+            int x = in.readInt();
+            int y = in.readInt();
+            int z = in.readInt();
+            TileEntity tile = world.getBlockTileEntity(x, y, z);
 
-		return null;
-	}
+            if (tile != null && tile instanceof TileEntityBase)
+                ((TileEntityBase)tile).handleUpdatePacket(net, in, true);
+        }
+    }
 
+    public void sendPacketToServer(Packet pkt) {
+    }
 
-	/* IPacketHandler */
-
-	public void onPacketData(NetworkManager net, String channel, byte[] data) {
-		DataInputStream in = new DataInputStream(new ByteArrayInputStream(data));
-
-		if (!channel.equals(Common.CHANNEL))
-			return;
-
-		try {
-			handlePacket(net, in);
-		} catch (Exception e) {
-			return;
-		}
-	}
+    public void sendPacketToPlayer(String player, Packet pkt) {
+        FMLServerHandler.instance().getServer().configManager.sendPacketToPlayer(player, pkt);
+    }
 
 
-	/* IConnectionHandler */
+    /* IGuiHandler */
 
-	public void onConnect(NetworkManager net) {}
+    public Object getGuiElement(int ID, EntityPlayer p, World world, int x, int y, int z) {
+        TileEntity te;
+        EntityPlayerMP player;
 
-	public void onLogin(NetworkManager net, Packet1Login login) {
-		MessageManager.getInstance().registerChannel(net, this, Common.CHANNEL);
-	}
+        if (!(p instanceof EntityPlayerMP))
+            return null;
+        if (!world.blockExists(x, y, z))
+            return null;
 
-	public void onDisconnect(NetworkManager net, String message, Object[] args) {
-		MessageManager.getInstance().unregisterChannel(net, this, Common.CHANNEL);
-	}
+        player = (EntityPlayerMP)p;
+        te = world.getBlockTileEntity(x, y, z);
+
+        if (te != null && te instanceof TileEntityBase)
+            ((TileEntityBase)te).sendUpdateToPlayer(p.getUsername());
+
+        return null;
+    }
+
+
+    /* IPacketHandler */
+
+    public void onPacketData(NetworkManager net, String channel, byte[] data) {
+        DataInputStream in = new DataInputStream(new ByteArrayInputStream(data));
+
+        if (!channel.equals(Common.CHANNEL))
+            return;
+
+        try {
+            handlePacket(net, in);
+        } catch (Exception e) {
+            return;
+        }
+    }
+
+
+    /* IConnectionHandler */
+
+    public void onConnect(NetworkManager net) {}
+
+    public void onLogin(NetworkManager net, Packet1Login login) {
+        MessageManager.getInstance().registerChannel(net, this, Common.CHANNEL);
+    }
+
+    public void onDisconnect(NetworkManager net, String message, Object[] args) {
+        MessageManager.getInstance().unregisterChannel(net, this, Common.CHANNEL);
+    }
 }

@@ -9,72 +9,72 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiZPM extends GuiBase
 {
-	protected TileEntityZPM zpm;
+    protected TileEntityZPM zpm;
 
-	protected int xSize = 108;
-	protected int ySize = 34;
+    protected int xSize = 108;
+    protected int ySize = 34;
 
-	protected int buttonWide = 94;
-	protected final int buttonHigh = 20;
+    protected int buttonWide = 94;
+    protected final int buttonHigh = 20;
 
-	protected GuiButton drainingBtn;
+    protected GuiButton drainingBtn;
 
-	@Override
-	public void setTileEntity(TileEntityBase teb) {
-		/* unchecked cast, to raise an exception if necessary */
-		zpm = (TileEntityZPM)teb;
-	}
+    @Override
+    public void setTileEntity(TileEntityBase teb) {
+        /* unchecked cast, to raise an exception if necessary */
+        zpm = (TileEntityZPM)teb;
+    }
 
-	@Override
-	public void drawScreen(int x, int y, float z) {
-		int tex = mc.renderEngine.getTexture(Common.GUI_PNG);
-		int dx = (width - xSize) / 2;
-		int dy = (height - ySize) / 2;
+    @Override
+    public void drawScreen(int x, int y, float z) {
+        int tex = mc.renderEngine.getTexture(Common.GUI_PNG);
+        int dx = (width - xSize) / 2;
+        int dy = (height - ySize) / 2;
 
-		updateLabels();
+        updateLabels();
 
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.renderEngine.bindTexture(tex);
-		drawTexturedModalRect(dx, dy, 0, 0, xSize, ySize);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        mc.renderEngine.bindTexture(tex);
+        drawTexturedModalRect(dx, dy, 0, 0, xSize, ySize);
 
-		super.drawScreen(x, y, z);
-	}
+        super.drawScreen(x, y, z);
+    }
 
-	@Override
-	public boolean doesGuiPauseGame() {
-		return false;
-	}
+    @Override
+    public boolean doesGuiPauseGame() {
+        return false;
+    }
 
-	@Override
-	public void initGui() {
-		int dx = (width - xSize) / 2;
-		int dy = (height - ySize) / 2;
+    @Override
+    public void initGui() {
+        int dx = (width - xSize) / 2;
+        int dy = (height - ySize) / 2;
 
-		/* these coords are from the .png */
-		drainingBtn = addButton(0, dx+7, dy+7);
+        /* these coords are from the .png */
+        drainingBtn = addButton(0, dx+7, dy+7);
 
-		updateLabels();
-	}
+        updateLabels();
+    }
 
-	protected GuiButton addButton(int id, int x, int y) {
-		GuiButton btn = new GuiButton(id, x, y, buttonWide + 1, buttonHigh, "");
-		controlList.add(btn);
-		return btn;
-	}
+    protected GuiButton addButton(int id, int x, int y) {
+        GuiButton btn = new GuiButton(id, x, y, buttonWide + 1, buttonHigh, "");
+        controlList.add(btn);
+        return btn;
+    }
 
-	protected void updateLabels() {
-		drainingBtn.displayString = (zpm.getDraining() ? "Draining" : "Filling");
-	}
+    protected void updateLabels() {
+        drainingBtn.displayString = (zpm.getDraining() ? "Draining" : "Filling");
+    }
 
-	@Override
-	protected void actionPerformed(GuiButton btn) {
-		switch (btn.id) {
-		case 0:
-			zpm.setDraining(!zpm.getDraining());
-			break;
-		}
+    @Override
+    protected void actionPerformed(GuiButton btn) {
+        switch (btn.id) {
+        case 0:
+            zpm.setDraining(!zpm.getDraining());
+            break;
+        }
 
-		zpm.sendUpdateToServer();
-	}
+        zpm.sendUpdateToServer();
+    }
 
 }
